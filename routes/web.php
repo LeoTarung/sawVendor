@@ -31,9 +31,13 @@ Route::post('forgot-password', [AuthController::class, 'sendResetLink'])->name('
 Route::get('/', [KriteriaController::class, 'home'])->middleware('auth')->name('home');
 
 Route::get('/kriteria', [KriteriaController::class, 'index'])->middleware('auth')->name('kriteria');
+Route::get('/partial/modal/notes/{id}', [KriteriaController::class, 'indexModalNotes'])->middleware('auth')->name('kriteria');
 Route::post('/kriteria/tambah', [KriteriaController::class, 'tambahKriteria'])->middleware('auth');
 Route::get('/kriteria/edit/{kode}', [KriteriaController::class, 'editkriteria'])->middleware('auth');
 Route::post('/kriteria/edit', [KriteriaController::class, 'updateKriteria'])->middleware('auth');
+Route::post('/save/notes/{id}', [KriteriaController::class, 'saveNotes'])->middleware('auth');
+Route::post('/update/notes/{id}', [KriteriaController::class, 'saveNotes'])->middleware('auth');
+Route::post('/validasi/kriteria/{id}', [KriteriaController::class, 'validasi'])->middleware('auth');
 Route::delete('/kriteria/{kode}', [KriteriaController::class, 'destroy'])->middleware('auth');
 
 Route::get('/alternatif', [AlternativeController::class, 'index'])->middleware('auth')->name('alternatif');

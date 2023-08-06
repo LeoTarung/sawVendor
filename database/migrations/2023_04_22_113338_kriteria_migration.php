@@ -19,6 +19,8 @@ class KriteriaMigration extends Migration
             $table->string('jenis_kriteria');
             $table->decimal('bobot', $precision = 8, $scale = 2);
             $table->string('keterangan');
+            $table->string('status')->default('Belum Divalidasi');
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }

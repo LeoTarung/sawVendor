@@ -47,6 +47,7 @@
                                         <td scope="col" class="text-center">{{ $key->range }}</td>
                                         <td scope="col" class="text-center">{{ $key->kategori }}</td>
                                         <td scope="col">{{ $key->nilai }}</td>
+                                        
                                         <td><button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit"
                                                 onclick="edit('{{ $key->id }}')">Edit</button>
                                             <button class="btn btn-danger"
@@ -140,9 +141,16 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-12 mb-3">
                                 <div class="form-floating">
-                                    <label for="keterangan" class="w-100">NAMA SUB KRITERIA</label>
+                                    <label for="range" class="w-100">Range</label>
                                     <input type="text" class="w-100 w-100   rounded border-primary fw-bold"
-                                        id="keterangan_edit" name="keterangan" required>
+                                        id="rangeEdit" name="range" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-12 mb-3">
+                                <div class="form-floating">
+                                    <label for="kategori" class="w-100">Kategori</label>
+                                    <input type="text" class="w-100 w-100   rounded border-primary fw-bold"
+                                        id="kategoriEdit" name="kategori" required>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-sm-12 mb-3">
@@ -191,7 +199,8 @@
                     // let kodeEdit = document.getElementById('kode_alternatif_edit');
                     // kodeEdit.value = kode;
                     console.log(data);
-                    $("#keterangan_edit").val((data.keterangan));
+                    $("#kategoriEdit").val((data.kategori));
+                    $("#rangeEdit").val((data.range));
                     $("#nilai_edit").val((data.nilai));
                     $("#id").val((data.id));
                 }

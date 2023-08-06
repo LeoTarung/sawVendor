@@ -264,155 +264,135 @@ class PenilaianController extends Controller
     {
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('urutan');
-        foreach ($alt as $key) {
-            $alternatif[] = $key;
-        }
-        // $alternatif = (object) $alternatif;
-        $subKriteria = subKriteriaModel::all();
-        $penilaian = PenilaianModel::all();
+        $sub = subKriteriaModel::all();
+        if ($alt->first() != null && $kriteria->first() != null && $sub->first() != null) {
+            foreach ($alt as $key) {
+                $alternatif[] = $key;
+            }
+            // $alternatif = (object) $alternatif;
+            $subKriteria = subKriteriaModel::all();
+            $penilaian = PenilaianModel::all();
 
-        // dd($subrelation);
-        $kriteriaCount = KriteriaModel::count();
-        $alternatifCount = AlternatifModel::count();
+            // dd($subrelation);
+            $kriteriaCount = KriteriaModel::count();
+            $alternatifCount = AlternatifModel::count();
 
-        // dd($alternatif);
+            // dd($alternatif);
 
-        // GET JENIS KRITERIA
-        for ($i = 0; $i < $kriteriaCount; $i++) {
-            ${'kriteria' . $i} = $kriteria->get($i);
-            $kriteriaJenis[] =  ${'kriteria' . $i}->jenis_kriteria;
-        }
-        // GET KODE KRITERIA
-        for ($i = 0; $i < $kriteriaCount; $i++) {
-            ${'kriteria' . $i} = $kriteria->get($i);
-            $kriteriaKode[] =  ${'kriteria' . $i}->kode_kriteria;
-        }
+            // GET JENIS KRITERIA
+            for ($i = 0; $i < $kriteriaCount; $i++) {
+                ${'kriteria' . $i} = $kriteria->get($i);
+                $kriteriaJenis[] =  ${'kriteria' . $i}->jenis_kriteria;
+            }
+            // GET KODE KRITERIA
+            for ($i = 0; $i < $kriteriaCount; $i++) {
+                ${'kriteria' . $i} = $kriteria->get($i);
+                $kriteriaKode[] =  ${'kriteria' . $i}->kode_kriteria;
+            }
 
-        // GET NAMA GURU
-        for ($i = 0; $i < $alternatifCount; $i++) {
-            ${'alternatif' . $i} = $alternatif[$i];
-            $alternatifJenis[] =  ${'alternatif' . $i}->nama_vendor;
-        }
+            // GET NAMA GURU
+            for ($i = 0; $i < $alternatifCount; $i++) {
+                ${'alternatif' . $i} = $alternatif[$i];
+                $alternatifJenis[] =  ${'alternatif' . $i}->nama_vendor;
+            }
 
-        // GET KODE GURU
-        for ($i = 0; $i < $alternatifCount; $i++) {
-            ${'alternatif' . $i} = $alternatif[$i];
-            $alternatifKode[] =  ${'alternatif' . $i}->kode_alternatif;
-        }
+            // GET KODE GURU
+            for ($i = 0; $i < $alternatifCount; $i++) {
+                ${'alternatif' . $i} = $alternatif[$i];
+                $alternatifKode[] =  ${'alternatif' . $i}->kode_alternatif;
+            }
 
-        // NORMALISASI
-        for ($j = 1; $j <= $alternatifCount; $j++) {
-            $first = collect($penilaian->where('kode_alternatif', 'A' . $j)->all());
-            for ($i = 1; $i <= $kriteriaCount; $i++) {
-                $seleksi = $kriteria->where('kode_kriteria', 'C' . $i)->first();
-                ${'C' . $i . '_' . $j} = $penilaian->where('kode_kriteria', 'C' . $i)->first();
-                ${'x' .  $i . '_' . $j} = $first->where('kode_kriteria', 'C' . $i)->first();
-                if ($seleksi->keterangan == 'BENEFIT') {
+            // NORMALISASI
+            for ($j = 1; $j <= $alternatifCount; $j++) {
+                $first = collect($penilaian->where('kode_alternatif', 'A' . $j)->all());
+                for ($i = 1; $i <= $kriteriaCount; $i++) {
+                    $seleksi = $kriteria->where('kode_kriteria', 'C' . $i)->first();
+                    ${'C' . $i . '_' . $j} = $penilaian->where('kode_kriteria', 'C' . $i)->first();
+                    ${'x' .  $i . '_' . $j} = $first->where('kode_kriteria', 'C' . $i)->first();
+                    if ($seleksi->keterangan == 'BENEFIT') {
 
-                    ${'dataNormal' . $j}[] = ${'x' .  $i . '_' . $j}->nilai /  $penilaian->where('kode_kriteria', 'C' . $i)->max('nilai');
-                    // ${'data' . $j}[] = ${'dataNormal' . $i};
-                    // dd(${'C' . $i . '_' . $j}->min('nilai'));
-                } else {
-                    ${'dataNormal' . $j}[] = ${'C' . $i . '_' . $j}->min('nilai') / ${'x' .  $i . '_' . $j}->nilai;
+                        ${'dataNormal' . $j}[] = ${'x' .  $i . '_' . $j}->nilai /  $penilaian->where('kode_kriteria', 'C' . $i)->max('nilai');
+                        // ${'data' . $j}[] = ${'dataNormal' . $i};
+                        // dd(${'C' . $i . '_' . $j}->min('nilai'));
+                    } else {
+                        ${'dataNormal' . $j}[] = ${'C' . $i . '_' . $j}->min('nilai') / ${'x' .  $i . '_' . $j}->nilai;
+                    }
                 }
             }
-        }
 
-        for ($j = 1; $j <= $alternatifCount; $j++) {
-            $data[] =  ${'dataNormal' . $j};
-            // dd($j);
-        }
-
-        // Mencari Nilai Qi
-        // dd($data);
-        // for ($j = 1; $j <= $alternatifCount; $j++) {
-        //     for ($i = 1; $i <= $kriteriaCount; $i++) {
-
-        //         ${'bobot' .  $i . '_' . $j} = $kriteria->where('kode_kriteria', 'C' . $i)->first();
-
-        //         ${'timesQ' .  $i . '_' . $j} =  ${'bobot' .  $i . '_' . $j}->bobot * $data[$j - 1][$i - 1];
-
-        //         ${'powQ' .  $i . '_' . $j} =  pow($data[$j - 1][$i - 1], ${'bobot' .  $i . '_' . $j}->bobot);
-        //     }
-
-
-        //     ${'times2Q' . $j} =  ${'timesQ' . 1 . '_' . $j};
-        //     ${'pow2Q' . $j} =  ${'powQ' . 1 . '_' . $j};
-        //     for ($k = 2; $k <= $kriteriaCount; $k++) {
-        //         ${'times2Q' . $j} =   ${'times2Q' . $j} + ${'timesQ' .  $k . '_' . $j};
-        //         ${'pow2Q' . $j} =   ${'pow2Q' . $j} * ${'powQ' .  $k . '_' . $j};
-        //     }
-        //     ${'Q' . $j} = (${'times2Q' . $j} * 0.5) + (${'pow2Q' . $j} * 0.5);
-        // }
-
-
-        // for ($j = 1; $j <= $alternatifCount; $j++) {
-        //     $dataQi[] =  ${'Q' . $j};
-        // }
-
-        //------------- [Perhitungan akhir Bobot dikalikan dengan hasil normalisasi masing-masing ]-----------------//
-        for ($j = 1; $j <= count($data); $j++) {
-            ${'hasilRank' . $j} = 0;
-            for ($i = 1; $i <= $kriteriaCount; $i++) {
-                ${'bobot' .  $i . '_' . $j} = $kriteria->where('kode_kriteria', 'C' . $i)->first();
-
-                ${'timesQ' .  $i . '_' . $j} =  ${'bobot' .  $i . '_' . $j}->bobot * $data[$j - 1][$i - 1];
-                ${'dataRank' . $j}[] =   ${'timesQ' .  $i . '_' . $j};
-                ${'hasilRank' . $j} =  ${'hasilRank' . $j} +  ${'timesQ' .  $i . '_' . $j};
+            for ($j = 1; $j <= $alternatifCount; $j++) {
+                $data[] =  ${'dataNormal' . $j};
+                // dd($j);
             }
-        }
 
-        for ($j = 1; $j <= $alternatifCount; $j++) {
-            if (${'dataNormal' . $j} != null) {
-                $rank[] = ${'dataRank' . $j};
-                $hasil[] = ${'hasilRank' . $j};
+
+            //------------- [Perhitungan akhir Bobot dikalikan dengan hasil normalisasi masing-masing ]-----------------//
+            for ($j = 1; $j <= count($data); $j++) {
+                ${'hasilRank' . $j} = 0;
+                for ($i = 1; $i <= $kriteriaCount; $i++) {
+                    ${'bobot' .  $i . '_' . $j} = $kriteria->where('kode_kriteria', 'C' . $i)->first();
+
+                    ${'timesQ' .  $i . '_' . $j} =  ${'bobot' .  $i . '_' . $j}->bobot * $data[$j - 1][$i - 1];
+                    ${'dataRank' . $j}[] =   ${'timesQ' .  $i . '_' . $j};
+                    ${'hasilRank' . $j} =  ${'hasilRank' . $j} +  ${'timesQ' .  $i . '_' . $j};
+                }
+            }
+
+            for ($j = 1; $j <= $alternatifCount; $j++) {
+                if (${'dataNormal' . $j} != null) {
+                    $rank[] = ${'dataRank' . $j};
+                    $hasil[] = ${'hasilRank' . $j};
+                } else {
+                }
+            }
+            // $nilaiqi = nilaiQiModel::first();
+            // dd($nilaiqi);
+            if (nilaiQiModel::first() == null) {
+                for ($j = 1; $j <= $alternatifCount; $j++) {
+                    nilaiQiModel::create([
+                        'kode_alternatif' => 'A' . $j,
+                        'nilai_qi' => $hasil[$j - 1]
+                    ]);
+                }
             } else {
-            }
-        }
-        // $nilaiqi = nilaiQiModel::first();
-        // dd($nilaiqi);
-        if (nilaiQiModel::first() == null) {
-            for ($j = 1; $j <= $alternatifCount; $j++) {
-                nilaiQiModel::create([
-                    'kode_alternatif' => 'A' . $j,
-                    'nilai_qi' => $hasil[$j - 1]
-                ]);
-            }
-        } else {
-            for ($j = 1; $j <= $alternatifCount; $j++) {
-                $edit = nilaiQiModel::where('kode_alternatif', 'A' . $j);
+                for ($j = 1; $j <= $alternatifCount; $j++) {
+                    $edit = nilaiQiModel::where('kode_alternatif', 'A' . $j);
+                    // dd($edit);
+                    $edit->update([
+                        'kode_alternatif' => 'A' . $j,
+                        'nilai_qi' => $hasil[$j - 1]
+                    ]);
+                }
                 // dd($edit);
-                $edit->update([
-                    'kode_alternatif' => 'A' . $j,
-                    'nilai_qi' => $hasil[$j - 1]
-                ]);
             }
-            // dd($edit);
+
+            $qi = nilaiQiModel::all()->sortByDesc('nilai_qi');
+            // foreach ($qi as $key) {
+            //     $nilaiqi[] = $key;
+            // // }
+            // $test = $qi->first();
+            // dd($test->alternatif);
+
+
+            return view('hasil', [
+                'kriteria' => $kriteriaJenis,
+                'kriteriaCount' => $kriteriaCount,
+                'kriteriaKode' => $kriteriaKode,
+                'penilaian' => $penilaian,
+
+                'NilaiQi' => $qi,
+
+
+                'alternatif' => $alternatifJenis,
+                'alternatifCount' => $alternatifCount,
+                'alternatifKode' => $alternatifKode,
+                'subKriteria' => $subKriteria
+            ]);
+        } else {
+            return redirect('/kriteria');
         }
-
-        $qi = nilaiQiModel::all()->sortByDesc('nilai_qi');
-        // foreach ($qi as $key) {
-        //     $nilaiqi[] = $key;
-        // // }
-        // $test = $qi->first();
-        // dd($test->alternatif);
-
-
-        return view('hasil', [
-            'kriteria' => $kriteriaJenis,
-            'kriteriaCount' => $kriteriaCount,
-            'kriteriaKode' => $kriteriaKode,
-            'penilaian' => $penilaian,
-
-            'NilaiQi' => $qi,
-
-
-            'alternatif' => $alternatifJenis,
-            'alternatifCount' => $alternatifCount,
-            'alternatifKode' => $alternatifKode,
-            'subKriteria' => $subKriteria
-        ]);
     }
+
     public function indexPrint()
     {
         $qi = nilaiQiModel::all()->sortByDesc('nilai_qi');
