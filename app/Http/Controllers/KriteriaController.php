@@ -17,6 +17,19 @@ class KriteriaController extends Controller
         ]);
     }
 
+    public function indexModalNotes($id)
+    {
+        $data = KriteriaModel::all();
+
+        $kriteria = KriteriaModel::where('kode_kriteria', $id)->first();
+
+        return view('modalNotes', [
+            'data' => $data,
+            'kriteria' => $kriteria,
+            'id' => $id
+        ]);
+    }
+
     public function home()
     {
 
@@ -41,22 +54,26 @@ class KriteriaController extends Controller
     public function indexSub()
     {
         $data = KriteriaModel::all();
-        $dataCount = KriteriaModel::count();
-        for ($i = 0; $i < $dataCount; $i++) {
-            ${'data' . $i} = $data->get($i);
-            $dataJenis[] =  ${'data' . $i}->jenis_kriteria;
+        if ($data->first() == null) {
+            return redirect()->back();
+        } else {
+            $dataCount = KriteriaModel::count();
+            for ($i = 0; $i < $dataCount; $i++) {
+                ${'data' . $i} = $data->get($i);
+                $dataJenis[] =  ${'data' . $i}->jenis_kriteria;
+            }
+            $sub1 = subKriteriaModel::where('cat_kriteria', 'C1')->get();
+            $sub2 = subKriteriaModel::where('cat_kriteria', 'C2')->get();
+            $sub3 = subKriteriaModel::where('cat_kriteria', 'C3')->get();
+            $sub4 = subKriteriaModel::where('cat_kriteria', 'C4')->get();
+            $sub5 = subKriteriaModel::where('cat_kriteria', 'C5')->get();
+            // dd($sub1);
+            return view('subKriteria', [
+                'jenisKriteria' => $dataJenis,
+                'dataCount' =>  $dataCount,
+                'sub1' => $sub1, 'sub2' => $sub2, 'sub3' => $sub3, 'sub4' => $sub4, 'sub5' => $sub5,
+            ]);
         }
-        $sub1 = subKriteriaModel::where('cat_kriteria', 'C1')->get();
-        $sub2 = subKriteriaModel::where('cat_kriteria', 'C2')->get();
-        $sub3 = subKriteriaModel::where('cat_kriteria', 'C3')->get();
-        $sub4 = subKriteriaModel::where('cat_kriteria', 'C4')->get();
-        $sub5 = subKriteriaModel::where('cat_kriteria', 'C5')->get();
-        // dd($sub1);
-        return view('subKriteria', [
-            'jenisKriteria' => $dataJenis,
-            'dataCount' =>  $dataCount,
-            'sub1' => $sub1, 'sub2' => $sub2, 'sub3' => $sub3, 'sub4' => $sub4, 'sub5' => $sub5,
-        ]);
     }
 
     public function tambahSub(Request $request, $i)
@@ -90,6 +107,32 @@ class KriteriaController extends Controller
         return Redirect("/kriteria");
     }
 
+    public function saveNotes(Request $request, $id)
+    {
+        // dd($request->bobot);
+        $kriteria = $id;
+        KriteriaModel::where('kode_kriteria', $kriteria)
+            ->update([
+                'notes' => $request->notes,
+            ]);
+
+        return Redirect("/kriteria");
+    }
+
+    public function validasi($id)
+    {
+        // dd($request->bobot);
+        $kriteria = $id;
+        KriteriaModel::where('kode_kriteria', $kriteria)
+            ->update([
+                'status' => 'ACC'
+            ]);
+
+        // return Redirect("/kriteria");
+    }
+
+
+
     public function destroy($kode)
     {
         $data = KriteriaModel::all();
@@ -115,7 +158,8 @@ class KriteriaController extends Controller
         subKriteriaModel::where('id', $id)
             ->update([
                 'nilai' => $request->nilai,
-                'keterangan' => $request->keterangan
+                'range' => $request->range,
+                'kategori' => $request->kategori
             ]);
         return Redirect("/subKriteria");
     }

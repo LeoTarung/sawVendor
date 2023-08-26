@@ -8,8 +8,12 @@
                     <h2 class=" d-flex justify-content-start">Data Kriteria</h4>
                 </div>
                 <div class="col-6 d-flex  justify-content-end h-50">
-                    <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#tambah" onclick="tambah()"><i
-                            class="fa fa-plus"></i> Tambah Data</h4>
+                    @if (Auth::user()->isManager())
+                    @else
+                        <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#tambah"
+                            onclick="tambah()"><i class="fa fa-plus"></i> Tambah Data</h4>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -29,6 +33,7 @@
                                 <th scope="col">Jenis Kriteria</th>
                                 <th scope="col">Bobot</th>
                                 <th scope="col">Keterangan</th>
+                                <th scope="col">Status</th>
                                 <th scope="col"> Action</th>
                             </tr>
                         </thead>
@@ -41,10 +46,23 @@
                                     <td>{{ $k->jenis_kriteria }}</td>
                                     <td>{{ $k->bobot * 100 }}%</td>
                                     <td>{{ $k->keterangan }}</td>
-                                    <td><button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit"
-                                            onclick="edit('{{ $k->kode_kriteria }}')">Edit</button>
-                                        <button class="btn btn-danger"
-                                            onclick="deleteRecord('{{ $k->kode_kriteria }}')">Hapus</button>
+                                    <td>{{ $k->status }}</td>
+                                    <td>
+                                        @if (Auth::user()->isManager())
+                                            @if ($k->status == 'ACC')
+                                            @else
+                                                <button class="btn btn-success"
+                                                    onclick="validasi('{{ $k->kode_kriteria }}')">ACC</button>
+                                            @endif
+
+                                            <button class="btn btn-info"
+                                                onclick="notes('{{ $k->kode_kriteria }}')">Notes</button>
+                                        @else
+                                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit"
+                                                onclick="edit('{{ $k->kode_kriteria }}')">Edit</button>
+                                            <button class="btn btn-danger"
+                                                onclick="deleteRecord('{{ $k->kode_kriteria }}')">Hapus</button>
+                                        @endif
                                     </td>
                                     <meta name="csrf-token" content="{{ csrf_token() }}">
                                 </tr>
@@ -102,9 +120,9 @@
                                     <select class="form-select w-100  rounded border-primary fw-bold w-75"
                                         id="floatingSelect" aria-label="Floating label select example" id="keterangan"
                                         name="keterangan">
-                                        <option selected>BENEFIT </option>
-                                        <option value="benefit">BENEFIT</option>
-                                        <option value="cost">COST</option>
+                                        <option selected>--Pilih Item--</option>
+                                        <option value="BENEFIT">BENEFIT</option>
+                                        <option value="COST">COST</option>
                                     </select>
                                 </div>
                             </div>
@@ -187,6 +205,25 @@
         </div>
     </div>
 
+    {{-- Modal Notes Fro --}}
+    <div class="modal fade" id="ModalNotes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg  ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-5" id="ModalNotesjudul">Edit Data</h5>
+                    <button type="button" class="btn-danger rounded btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function tambah() {
@@ -236,6 +273,45 @@
             } else {
 
             }
+        }
+
+        function validasi(kode) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Anda akan Konfirmasi kriteria tersebut",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    fetch('/validasi/kriteria' + '/' + kode, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-Token': csrfToken
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            console.log('Acc gagal');
+                        }
+                    });
+                }
+            })
+        }
+
+        function notes(kode) {
+            $.get(
+                "/partial/modal/notes" + "/" + kode, {},
+                function(data) {
+                    $("#ModalNotesjudul").html("Notes"); //Untuk kasih judul di modal
+                    $("#ModalNotes").modal("show"); //kalo ID pake "#" kalo class pake "."
+                    $('#ModalNotes .modal-body').load("/partial/modal/notes" + "/" + kode);
+                }
+            );
         }
     </script>
 @endsection

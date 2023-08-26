@@ -12,28 +12,35 @@
                         Pemilihan</span></a></h1>
         </div>
 
-        <ul class="list-unstyled components mb-5">
+        <ul class="list-unstyled components mb-5 mt-5">
             <li>
                 <a href="/"><span class="fa fa-home mr-3"></span> Home</a>
             </li>
             <li>
                 <a href="/kriteria"><span class="fa fa-briefcase mr-3"></span>Data Kriteria</a>
             </li>
-            <li>
-                <a href="/subKriteria"><span class="fa fa-briefcase mr-3"></span>Data Sub Kriteria</a>
-            </li>
-            <li>
-                <a href="/alternatif"><span class="fa fa-user mr-3"></span>Data Alternatif</a>
-            </li>
-            <li>
-                <a href="/penilaian"><span class="fa fa-sticky-note mr-3"></span>Penilaian</a>
-            </li>
-            <li>
-                <a href="/perhitungan"><span class="fa fa-suitcase mr-3"></span>Perhitungan SAW</a>
-            </li>
-            <li>
-                <a href="/hasil"><span class="fa fa-cogs mr-3"></span>Hasil</a>
-            </li>
+            @if (Auth::user()->isManager())
+                <li>
+                    <a href="/hasil"><span class="fa fa-cogs mr-3"></span>Hasil</a>
+                </li>
+            @else
+                <li>
+                    <a href="/subKriteria"><span class="fa fa-briefcase mr-3"></span>Data Sub Kriteria</a>
+                </li>
+                <li>
+                    <a href="/alternatif"><span class="fa fa-user mr-3"></span>Data Alternatif</a>
+                </li>
+                <li>
+                    <a href="/penilaian"><span class="fa fa-sticky-note mr-3"></span>Penilaian</a>
+                </li>
+                <li>
+                    <a href="/perhitungan"><span class="fa fa-suitcase mr-3"></span>Perhitungan SAW</a>
+                </li>
+                <li>
+                    <a href="/hasil"><span class="fa fa-cogs mr-3"></span>Hasil</a>
+                </li>
+            @endif
+
         </ul>
 
         <div class="footer">
