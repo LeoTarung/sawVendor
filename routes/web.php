@@ -18,7 +18,6 @@ use App\Http\Controllers\AuthController;
 */
 
 Route::get('/login', [AuthController::class, 'tampilanLogin'])->name('login');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/login/masuk', [AuthController::class, 'Login'])->name('proses_login');
 Route::get('/daftar', [AuthController::class, 'tampilanDaftar']);
 Route::post('/daftar', [AuthController::class, 'daftar']);

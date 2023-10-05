@@ -69,7 +69,7 @@
                                 <input type="text" class="w-100 w-100   rounded border-primary fw-bold"
                                     id="kode_alternatif_edit" name="kode_alternatif_edit" required readonly>
                             </div>
-                            @for ($k = 0; $k < $kriteriaCount; $k++)
+                            {{-- @for ($k = 0; $k < $kriteriaCount; $k++)
                                 <div class="col-12 mb-3">
                                     <div class="form-floating">
                                         <label for="{{ $kriteria[$k] }}" class="w-50">{{ $kriteria[$k] }}</label>
@@ -83,7 +83,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            @endfor
+                            @endfor --}}
                         </div>
                         <div class="modal-footer">
 
@@ -121,20 +121,26 @@
                                 <div class="col-12 mb-3">
                                     <div class="form-floating">
                                         <label for="{{ $kriteria[$k] }}" class="w-50">{{ $kriteria[$k] }}</label>
-                                        <select class="form-select w-100  rounded border-primary fw-bold w-75"
+                                        {{-- <select class="form-select w-100  rounded border-primary fw-bold w-75"
                                             id="floatingSelect" aria-label="Floating label select example"
                                             id="{{ $kriteria[$k] }}" name="kriteria{{ $k + 1 }}">
                                             <option selected>-- Pilih --</option>
                                             @foreach ($subKriteria->where('cat_kriteria', 'C' . ($k + 1)) as $key)
                                                 <option value="{{ $key->range }}">{{ $key->range }}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
+                                        {{-- <label for="kode_alternatif" class="w-50">KODE ALTERNATIF</label> --}}
+                                        <input type="number" class="w-100 w-100   rounded border-primary fw-bold"
+                                            id="{{ $kriteria[$k] }}" name="kriteria{{ $k + 1 }}" required>
+                                        {{--    <label for="kode_alternatif" class="w-50">KODE ALTERNATIF</label> --}}
+                                        {{-- <input type="text" class="w-100 w-100   rounded border-primary fw-bold"
+                                            id="kode_alternatif" name="kode_alternatif" required readonly> --}}
                                     </div>
                                 </div>
                             @endfor
                         </div>
                         <div class="modal-footer">
-                            <button type="reset" class="btn btn-secondary" id="btn-cancel">Reset</button>
+                            {{--     <button type="reset" class="btn btn-secondary" id="btn-cancel">Reset</button> --}}
                             <button type="button" class="btn btn-secondary" id="btn-cancel"
                                 data-bs-dismiss="modal">Cancel</button>
                             {{-- <button type="submit" class="btn btn-primary" onclick="redirect()">Lanjutkan</button> --}}

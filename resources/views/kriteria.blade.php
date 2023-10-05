@@ -1,5 +1,14 @@
 @extends('main')
 @section('container')
+    {{-- @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif --}}
     <!-- Page Content  -->
     <div id="content" class="p-4 p-md-5 pt-5">
         <div class="container-fluid border-bottom">
@@ -23,6 +32,15 @@
                 <div class="card-header bg-primary" style="color:wheat">
                     <i class="fa fa-paperclip"></i></i> Daftar Data Kriteria
                 </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="table-responsive">
 
                     <table class="table m-3 ">
@@ -109,7 +127,7 @@
                                         <label for="bobot " class="w-50">BOBOT</label>
                                         <input type="number" class=" w-75  rounded border-primary fw-bold"
                                             aria-label="Dollar amount (with dot and two decimal places)" id="bobot"
-                                            name="bobot">
+                                            name="bobot" required>
                                         <span class="W-25  rounded border-primary input-group-text">%</span>
                                     </div>
                                 </div>

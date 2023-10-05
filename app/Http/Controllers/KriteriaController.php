@@ -42,6 +42,20 @@ class KriteriaController extends Controller
     {
         $x =  $request->kode_kriteria;
         // dd($x);
+        $dataKriteria = KriteriaModel::all();
+        $cekBatas = 0;
+        foreach ($dataKriteria as $key) {
+            $cekBatas = $cekBatas + $key->bobot;
+        }
+        $bobot = $request->bobot / 100;
+        $cekBatas = $cekBatas + $bobot;
+        // dd($cekBatas);
+        if ($cekBatas > 1) {
+            return redirect()->back()->withErrors(['message' => 'Bobot Sudah melebihi 100%']);
+        }
+        if ($request->keterangan == '--Pilih Item--') {
+            return redirect()->back()->withErrors(['message' => 'Isi Kolom Keterangan terlebih dahulu']);
+        }
         KriteriaModel::create([
             'kode_kriteria' => $x,
             'jenis_kriteria' => $request->jenis_kriteria,

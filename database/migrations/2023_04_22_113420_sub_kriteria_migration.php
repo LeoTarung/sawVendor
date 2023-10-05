@@ -13,16 +13,16 @@ class SubKriteriaMigration extends Migration
      */
     public function up()
     {
-        Schema::create('sub_kriteria', function (Blueprint $table) {
-            $table->id();
-            $table->string('cat_kriteria');
-            // $table->string('id_penyakit');
-            $table->foreign('cat_kriteria')->references('kode_kriteria')->on('kriteria')->onDelete('cascade');
-            $table->integer('nilai');
-            $table->string('range');
-            $table->string('kategori');
-            $table->timestamps();
-        });
+        // Schema::create('sub_kriteria', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('cat_kriteria');
+        //     // $table->string('id_penyakit');
+        //     $table->foreign('cat_kriteria')->references('kode_kriteria')->on('kriteria')->onDelete('cascade');
+        //     $table->integer('nilai');
+        //     $table->string('range');
+        //     $table->string('kategori');
+        //     $table->timestamps();
+        // });
     }
 
     /**
