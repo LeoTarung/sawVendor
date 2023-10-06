@@ -5,7 +5,7 @@
         <div class="container-fluid border-bottom">
             <div class="row">
                 <div class="col-6">
-                    <h2 class=" d-flex justify-content-start">Data Alternatif</h4>
+                    <h2 class=" d-flex justify-content-start">Data Vendor</h4>
                 </div>
                 <div class="col-6 d-flex  justify-content-end h-50">
                     <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#tambah" onclick="tambah()"><i
@@ -17,7 +17,7 @@
         <div class="container-fluid d-flex justify-content-center mt-3">
             <div class="card shadow-sm w-100">
                 <div class="card-header bg-primary" style="color:wheat">
-                    <i class="fa fa-users"></i></i> Daftar Data Alternatif
+                    <i class="fa fa-users"></i></i> Daftar Data Vendor
                 </div>
                 <div class="table-responsive">
 
@@ -25,7 +25,7 @@
                         <thead class="table-primary">
                             <tr>
                                 <th scope="col">No</th>
-                                <th scope="col">Kode Alternatif</th>
+                                <th scope="col">Kode Vendor</th>
                                 <th scope="col">Nama Vendor</th>
                                 <th scope="col"> Action</th>
                             </tr>
@@ -70,7 +70,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-12 mb-3">
                                 <div class="form-floating">
-                                    <label for="kode_alternatif" class="w-100">KODE ALTERNATIF</label>
+                                    <label for="kode_alternatif" class="w-100">KODE VENDOR</label>
                                     <input type="text" class="w-100 w-100   rounded border-primary fw-bold"
                                         id="kode_alternatif" name="kode_alternatif" required readonly>
                                 </div>
@@ -111,7 +111,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-12 mb-3">
                                 <div class="form-floating">
-                                    <label for="kode_alternatif" class="w-100">KODE ALTERNATIF</label>
+                                <label for="kode_alternatif" class="w-100">KODE VENDOR</label>
                                     <input type="text" class="w-100 w-100   rounded border-primary fw-bold"
                                         id="kode_alternatif_edit" name="kode_alternatif" required readonly>
                                 </div>

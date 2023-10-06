@@ -11,8 +11,25 @@
                         alt="" style="width: 75%;"><span>Sistem
                         Pemilihan</span></a></h1>
         </div>
+        <div class="col-12 d-flex align-items-start center justify-content-center flex-column mt-3 mb-2" style="">
+            {{-- <div> --}}
+            {{-- <h5 class="align-middle mt-4" style="margin-left: -14%">Admin</h5> --}}
+            <div class="row
+            d-flex align-items-center justify-content-center">
+                <div class="card"
+                    style="margin-top:0%;width:10px; height:10px;border-radius:20px;;background-color:greenyellow;">
+                </div>
+                <span class="ms-5" style="font-size: 18px; margin-left:10px; ">
+                    @if (Auth::user()->isManager())
+                        Manager
+                    @else
+                        Staff
+                    @endif
+                </span>
+            </div>
+        </div>
 
-        <ul class="list-unstyled components mb-5 mt-5">
+        <ul class="list-unstyled components mb-5">
             <li>
                 <a href="/"><span class="fa fa-home mr-3"></span> Home</a>
             </li>
@@ -24,14 +41,14 @@
                     <a href="/hasil"><span class="fa fa-cogs mr-3"></span>Hasil</a>
                 </li>
             @else
-                <li>
+                {{-- <li>
                     <a href="/subKriteria"><span class="fa fa-briefcase mr-3"></span>Data Sub Kriteria</a>
+                </li> --}}
+                <li>
+                    <a href="/alternatif"><span class="fa fa-user mr-3"></span>Data Vendor</a>
                 </li>
                 <li>
-                    <a href="/alternatif"><span class="fa fa-user mr-3"></span>Data Alternatif</a>
-                </li>
-                <li>
-                    <a href="/penilaian"><span class="fa fa-sticky-note mr-3"></span>Penilaian</a>
+                    <a href="/penilaian"><span class="fa fa-sticky-note mr-3"></span> Data Penilaian</a>
                 </li>
                 <li>
                     <a href="/perhitungan"><span class="fa fa-suitcase mr-3"></span>Perhitungan SAW</a>
@@ -42,7 +59,20 @@
             @endif
 
         </ul>
-
+        <div class="col-12 d-flex align-items-start center justify-content-center flex-column mt-3 mb-2" style="">
+            {{-- <div> --}}
+            {{-- <h5 class="align-middle mt-4" style="margin-left: -14%">Admin</h5> --}}
+            <div class="row
+            d-flex align-items-center justify-content-center">
+                <div class="card"
+                    style="margin-top:0%;width:10px; height:10px;border-radius:20px;;background-color:red;">
+                </div>
+                <a href="/logout" style="color: white"><span class="ms-5" style="font-size: 15px; margin-left:10px;"
+                        style="color: white">
+                        LOGOUT
+                    </span></a>
+            </div>
+        </div>
         <div class="footer">
             <p>
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->

@@ -18,24 +18,11 @@ class PenilaianController extends Controller
 
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('created_at');
-        if ($kriteria->first() == null) {
-            return redirect()->back();
-         } else{}
-         if ($alt->first() == null) {
-            return redirect()->back();
-         } else{}
-        foreach ($kriteria as $key ) {
-            if ($key->status != 'Setuju' ) {
-             return redirect("/kriteria");
-            } else {
-
-            }
-         }
         foreach ($alt as $key) {
             $alternatif[] = $key;
         }
         // dd($alternatif);
-        $subKriteria = subKriteriaModel::all();
+        // $subKriteria = subKriteriaModel::all();
         $penilaian = PenilaianModel::all();
 
         // dd($subrelation);
@@ -79,7 +66,7 @@ class PenilaianController extends Controller
             'alternatif' => $alternatifJenis,
             'alternatifCount' => $alternatifCount,
             'alternatifKode' => $alternatifKode,
-            'subKriteria' => $subKriteria
+            // 'subKriteria' => $subKriteria
         ]);
     }
 
@@ -87,14 +74,14 @@ class PenilaianController extends Controller
     {
         // $nilai = subKriteriaModel::where('keterangan', $request->kriteria2)->first();
         // dd($nilai->nilai);
-
+        // dd($request);
         for ($i = 1; $i <=  $kriteriaCount = KriteriaModel::count(); $i++) {
-            ${'nilai' . $i} = subKriteriaModel::where('range', $request->{'kriteria' . $i})->first();
+            ${'nilai' . $i} = $request->{'kriteria' . $i};
             PenilaianModel::create([
                 'kode_alternatif' => $request->kode_alternatif,
                 'kode_kriteria' => 'C' . $i,
-                'nilai' => ${'nilai' . $i}->nilai,
-                'sub_kriteria' =>  ${'nilai' . $i}->id,
+                'nilai' => ${'nilai' . $i},
+                // 'sub_kriteria' =>  ${'nilai' . $i}->id,
             ]);
         }
         return Redirect("/penilaian");
@@ -138,24 +125,11 @@ class PenilaianController extends Controller
     {
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('created_at');
-        if ($kriteria->first() == null) {
-            return redirect()->back();
-         } else{}
-         if ($alt->first() == null) {
-            return redirect()->back();
-         } else{}
-        foreach ($kriteria as $key ) {
-            if ($key->status != 'Setuju' ) {
-             return redirect("/kriteria");
-            } else {
-
-            }
-         }
         foreach ($alt as $key) {
             $alternatif[] = $key;
         }
         // $alternatif = (object) $alternatif;
-        $subKriteria = subKriteriaModel::all();
+        // $subKriteria = subKriteriaModel::all();
         $penilaian = PenilaianModel::all();
 
         // dd($subrelation);
@@ -202,15 +176,15 @@ class PenilaianController extends Controller
                         ${'dataNormal' . $j}[] = ${'x' .  $i . '_' . $j}->nilai /  $penilaian->where('kode_kriteria', 'C' . $i)->max('nilai');
                         // ${'data' . $j}[] = ${'dataNormal' . $i};
                         // dd(${'C' . $i . '_' . $j}->min('nilai'));
-                    } else {
-                        ${'dataNormal' . $j}[] = ${'C' . $i . '_' . $j}->min('nilai') / ${'x' .  $i . '_' . $j}->nilai;
+                    } elseif ($seleksi->keterangan == 'COST') {
+                        ${'dataNormal' . $j}[] = $penilaian->where('kode_kriteria', 'C' . $i)->min('nilai') / ${'x' .  $i . '_' . $j}->nilai;
                     }
                 }
             } else {
                 ${'dataNormal' . $j} = null;
             }
         }
-
+        // dd($penilaian->where('kode_kriteria', 'C' . 1)->min('nilai'), ${'x' .  $i . '_' . $j}->nilai; );
         for ($j = 1; $j <= $alternatifCount; $j++) {
             if (${'dataNormal' . $j} != null) {
                 $data[] =  ${'dataNormal' . $j};
@@ -283,37 +257,21 @@ class PenilaianController extends Controller
             'alternatif' => $alternatifJenis,
             'alternatifCount' => $alternatifCount,
             'alternatifKode' => $alternatifKode,
-            'subKriteria' => $subKriteria
+            // 'subKriteria' => $subKriteria
         ]);
     }
 
     public function hasil(Request $request)
     {
         $kriteria = KriteriaModel::all();
-        $alt = AlternatifModel::all()->sortBy('urutan');
+        $alt = AlternatifModel::all()->sortBy('created_at');
         $sub = subKriteriaModel::all();
-        if ($kriteria->first() == null) {
-            return redirect()->back();
-         } else{}
-         if ($alt->first() == null) {
-            return redirect()->back();
-         } else{}
-         if ($sub->first() == null) {
-            return redirect()->back();
-         } else{}
-        foreach ($kriteria as $key ) {
-            if ($key->status != 'Setuju' ) {
-             return redirect("/kriteria");
-            } else {
-
-            }
-         }
         if ($alt->first() != null && $kriteria->first() != null && $sub->first() != null) {
             foreach ($alt as $key) {
                 $alternatif[] = $key;
             }
             // $alternatif = (object) $alternatif;
-            $subKriteria = subKriteriaModel::all();
+            // $subKriteria = subKriteriaModel::all();
             $penilaian = PenilaianModel::all();
 
             // dd($subrelation);
@@ -347,27 +305,65 @@ class PenilaianController extends Controller
 
             // NORMALISASI
             for ($j = 1; $j <= $alternatifCount; $j++) {
-                $first = collect($penilaian->where('kode_alternatif', 'A' . $j)->all());
-                for ($i = 1; $i <= $kriteriaCount; $i++) {
-                    $seleksi = $kriteria->where('kode_kriteria', 'C' . $i)->first();
-                    ${'C' . $i . '_' . $j} = $penilaian->where('kode_kriteria', 'C' . $i)->first();
-                    ${'x' .  $i . '_' . $j} = $first->where('kode_kriteria', 'C' . $i)->first();
-                    if ($seleksi->keterangan == 'BENEFIT') {
+                // dd(collect($penilaian->where('kode_alternatif', 'A' . 2)->all()));
 
-                        ${'dataNormal' . $j}[] = ${'x' .  $i . '_' . $j}->nilai /  $penilaian->where('kode_kriteria', 'C' . $i)->max('nilai');
-                        // ${'data' . $j}[] = ${'dataNormal' . $i};
-                        // dd(${'C' . $i . '_' . $j}->min('nilai'));
-                    } else {
-                        ${'dataNormal' . $j}[] = ${'C' . $i . '_' . $j}->min('nilai') / ${'x' .  $i . '_' . $j}->nilai;
+
+                $first = collect($penilaian->where('kode_alternatif', 'A' . $j)->all());
+                if ($first->first() != null) {
+                    for ($i = 1; $i <= $kriteriaCount; $i++) {
+                        $seleksi = $kriteria->where('kode_kriteria', 'C' . $i)->first();
+                        ${'C' . $i . '_' . $j} = $penilaian->where('kode_kriteria', 'C' . $i)->first();
+                        ${'x' .  $i . '_' . $j} = $first->where('kode_kriteria', 'C' . $i)->first();
+                        if ($seleksi->keterangan == 'BENEFIT') {
+                            ${'dataNormal' . $j}[] = ${'x' .  $i . '_' . $j}->nilai /  $penilaian->where('kode_kriteria', 'C' . $i)->max('nilai');
+                            // ${'data' . $j}[] = ${'dataNormal' . $i};
+                            // dd(${'C' . $i . '_' . $j}->min('nilai'));
+                        } elseif ($seleksi->keterangan == 'COST') {
+                            ${'dataNormal' . $j}[] = $penilaian->where('kode_kriteria', 'C' . $i)->min('nilai') / ${'x' .  $i . '_' . $j}->nilai;
+                        }
                     }
+                } else {
+                    ${'dataNormal' . $j} = null;
                 }
             }
-
+            // dd($penilaian->where('kode_kriteria', 'C' . 1)->min('nilai'), ${'x' .  $i . '_' . $j}->nilai; );
             for ($j = 1; $j <= $alternatifCount; $j++) {
-                $data[] =  ${'dataNormal' . $j};
-                // dd($j);
+                if (${'dataNormal' . $j} != null) {
+                    $data[] =  ${'dataNormal' . $j};
+                } else {
+                }
             }
+            // dd($data);
+            // Mencari Nilai Qi
+            // dd($alternatifCount);
 
+            //------------- [ Khusus untuk Waspas, klo gk kepake apus aja ya ]-----------------//
+            // for ($j = 1; $j <= count($data); $j++) {
+            //     for ($i = 1; $i <= $kriteriaCount; $i++) {
+            //         ${'bobot' .  $i . '_' . $j} = $kriteria->where('kode_kriteria', 'C' . $i)->first();
+
+            //         ${'timesQ' .  $i . '_' . $j} =  ${'bobot' .  $i . '_' . $j}->bobot * $data[$j - 1][$i - 1];
+
+            //         ${'powQ' .  $i . '_' . $j} =  pow($data[$j - 1][$i - 1], ${'bobot' .  $i . '_' . $j}->bobot);
+            //     }
+
+
+            //     ${'times2Q' . $j} =  ${'timesQ' . 1 . '_' . $j};
+            //     ${'pow2Q' . $j} =  ${'powQ' . 1 . '_' . $j};
+            //     for ($k = 2; $k <= $kriteriaCount; $k++) {
+            //         ${'times2Q' . $j} =   ${'times2Q' . $j} + ${'timesQ' .  $k . '_' . $j};
+            //         ${'pow2Q' . $j} =   ${'pow2Q' . $j} * ${'powQ' .  $k . '_' . $j};
+            //     }
+            //     ${'Q' . $j} = (${'times2Q' . $j} * 0.5) + (${'pow2Q' . $j} * 0.5);
+            // }
+
+
+            // for ($j = 1; $j <= count($data); $j++) {
+            //     $dataQi[] =  ${'Q' . $j};
+            // }
+
+            // dd($dataQi);
+            //------------- []-----------------//
 
             //------------- [Perhitungan akhir Bobot dikalikan dengan hasil normalisasi masing-masing ]-----------------//
             for ($j = 1; $j <= count($data); $j++) {
@@ -410,6 +406,7 @@ class PenilaianController extends Controller
             }
 
             $qi = nilaiQiModel::all()->sortByDesc('nilai_qi');
+            dd($qi->find(0),  $qi->find(1));
             // foreach ($qi as $key) {
             //     $nilaiqi[] = $key;
             // // }
@@ -429,7 +426,7 @@ class PenilaianController extends Controller
                 'alternatif' => $alternatifJenis,
                 'alternatifCount' => $alternatifCount,
                 'alternatifKode' => $alternatifKode,
-                'subKriteria' => $subKriteria
+                // 'subKriteria' => $subKriteria
             ]);
         } else {
             return redirect('/kriteria');
