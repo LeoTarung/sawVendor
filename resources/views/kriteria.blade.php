@@ -46,17 +46,29 @@
                                     <td>{{ $k->jenis_kriteria }}</td>
                                     <td>{{ $k->bobot * 100 }}%</td>
                                     <td>{{ $k->keterangan }}</td>
-                                    <td>{{ $k->status }}</td>
+                                    <td>
+
+                                     @if ($k->status == 'Setuju')
+                                             {{ $k->status }}
+                                     @else
+                                         @if ($k->notes == null)
+                                            Belum DiValidasi
+                                         @else
+                                         {{ $k->notes }}
+                                         @endif
+                                     @endif
+
+                                    </td>
                                     <td>
                                         @if (Auth::user()->isManager())
-                                            @if ($k->status == 'ACC')
+                                            @if ($k->status == 'Setuju')
                                             @else
                                                 <button class="btn btn-success"
-                                                    onclick="validasi('{{ $k->kode_kriteria }}')">ACC</button>
+                                                    onclick="validasi('{{ $k->kode_kriteria }}')">Setuju</button>
                                             @endif
 
-                                            <button class="btn btn-info"
-                                                onclick="notes('{{ $k->kode_kriteria }}')">Notes</button>
+                                            <button class="btn btn-danger"
+                                                onclick="notes('{{ $k->kode_kriteria }}')">Tolak</button>
                                         @else
                                             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit"
                                                 onclick="edit('{{ $k->kode_kriteria }}')">Edit</button>

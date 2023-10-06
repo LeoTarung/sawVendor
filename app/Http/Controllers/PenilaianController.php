@@ -15,8 +15,22 @@ class PenilaianController extends Controller
 {
     public function index()
     {
+
         $kriteria = KriteriaModel::all();
-        $alt = AlternatifModel::all()->sortBy('urutan');
+        $alt = AlternatifModel::all()->sortBy('created_at');
+        if ($kriteria->first() == null) {
+            return redirect()->back();
+         } else{}
+         if ($alt->first() == null) {
+            return redirect()->back();
+         } else{}
+        foreach ($kriteria as $key ) {
+            if ($key->status != 'Setuju' ) {
+             return redirect("/kriteria");
+            } else {
+
+            }
+         }
         foreach ($alt as $key) {
             $alternatif[] = $key;
         }
@@ -106,7 +120,7 @@ class PenilaianController extends Controller
         // dd($request);
         $alternatif = $request->kode_alternatif_edit;
         for ($i = 1; $i <=  $kriteriaCount = KriteriaModel::count(); $i++) {
-            ${'nilai' . $i} = subKriteriaModel::where('keterangan', $request->{'kriteriaEdit' . $i})->first();
+            ${'nilai' . $i} = subKriteriaModel::where('range', $request->{'kriteriaEdit' . $i})->first();
             PenilaianModel::where('kode_alternatif', $alternatif)
                 ->where('kode_kriteria', 'C' . $i)
                 ->update([
@@ -123,7 +137,20 @@ class PenilaianController extends Controller
     public function indexPerhitungan()
     {
         $kriteria = KriteriaModel::all();
-        $alt = AlternatifModel::all()->sortBy('urutan');
+        $alt = AlternatifModel::all()->sortBy('created_at');
+        if ($kriteria->first() == null) {
+            return redirect()->back();
+         } else{}
+         if ($alt->first() == null) {
+            return redirect()->back();
+         } else{}
+        foreach ($kriteria as $key ) {
+            if ($key->status != 'Setuju' ) {
+             return redirect("/kriteria");
+            } else {
+
+            }
+         }
         foreach ($alt as $key) {
             $alternatif[] = $key;
         }
@@ -265,6 +292,22 @@ class PenilaianController extends Controller
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('urutan');
         $sub = subKriteriaModel::all();
+        if ($kriteria->first() == null) {
+            return redirect()->back();
+         } else{}
+         if ($alt->first() == null) {
+            return redirect()->back();
+         } else{}
+         if ($sub->first() == null) {
+            return redirect()->back();
+         } else{}
+        foreach ($kriteria as $key ) {
+            if ($key->status != 'Setuju' ) {
+             return redirect("/kriteria");
+            } else {
+
+            }
+         }
         if ($alt->first() != null && $kriteria->first() != null && $sub->first() != null) {
             foreach ($alt as $key) {
                 $alternatif[] = $key;
