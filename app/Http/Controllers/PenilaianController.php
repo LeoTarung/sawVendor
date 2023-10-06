@@ -15,6 +15,7 @@ class PenilaianController extends Controller
 {
     public function index()
     {
+
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('created_at');
         foreach ($alt as $key) {
@@ -106,7 +107,7 @@ class PenilaianController extends Controller
         // dd($request);
         $alternatif = $request->kode_alternatif_edit;
         for ($i = 1; $i <=  $kriteriaCount = KriteriaModel::count(); $i++) {
-            ${'nilai' . $i} = subKriteriaModel::where('keterangan', $request->{'kriteriaEdit' . $i})->first();
+            ${'nilai' . $i} = subKriteriaModel::where('range', $request->{'kriteriaEdit' . $i})->first();
             PenilaianModel::where('kode_alternatif', $alternatif)
                 ->where('kode_kriteria', 'C' . $i)
                 ->update([
@@ -264,8 +265,8 @@ class PenilaianController extends Controller
     {
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('created_at');
-        // $sub = subKriteriaModel::all();
-        if ($alt->first() != null && $kriteria->first() != null) {
+        $sub = subKriteriaModel::all();
+        if ($alt->first() != null && $kriteria->first() != null && $sub->first() != null) {
             foreach ($alt as $key) {
                 $alternatif[] = $key;
             }

@@ -10,7 +10,7 @@ class KriteriaController extends Controller
 {
     public function index()
     {
-        $data = KriteriaModel::all();
+        $data = KriteriaModel::orderBy('created_at')->get();
         // dd($data);
         return view('kriteria', [
             'kriteria' => $data
@@ -71,6 +71,13 @@ class KriteriaController extends Controller
         if ($data->first() == null) {
             return redirect()->back();
         } else {
+            foreach ($data as $key ) {
+               if ($key->status != 'Setuju' ) {
+                return redirect("/kriteria");
+               } else {
+
+               }
+            }
             $dataCount = KriteriaModel::count();
             for ($i = 0; $i < $dataCount; $i++) {
                 ${'data' . $i} = $data->get($i);
@@ -139,7 +146,7 @@ class KriteriaController extends Controller
         $kriteria = $id;
         KriteriaModel::where('kode_kriteria', $kriteria)
             ->update([
-                'status' => 'ACC'
+                'status' => 'Setuju'
             ]);
 
         // return Redirect("/kriteria");

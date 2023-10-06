@@ -9,7 +9,7 @@ class AlternativeController extends Controller
 {
     public function index()
     {
-        $data = AlternatifModel::all();
+        $data = AlternatifModel::orderBy('created_at')->get();
         return view('alternatif', [
             'alternatif' => $data
         ]);
