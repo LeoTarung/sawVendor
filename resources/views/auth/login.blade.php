@@ -136,7 +136,7 @@
         <div class="row" style="min-height: 100%; min-width:100%">
             <div class="col-9 d-flex justify-content-start ">
                 <div class="row" style="min-height: 100%; min-width:100%">
-                    <img src="/img/bg.webp" alt="" style="width:100%;height: 100%;margin-left:-1%">
+                    <img src="/img/hmicbb.jpg" alt="" style="width:100%;height: 100%;margin-left:-1%">
                 </div>
             </div>
             <div class="col-3">
