@@ -265,8 +265,8 @@ class PenilaianController extends Controller
     {
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('created_at');
-        $sub = subKriteriaModel::all();
-        if ($alt->first() != null && $kriteria->first() != null && $sub->first() != null) {
+        // $sub = subKriteriaModel::all();
+        if ($alt->first() != null && $kriteria->first() != null) {
             foreach ($alt as $key) {
                 $alternatif[] = $key;
             }
@@ -406,7 +406,7 @@ class PenilaianController extends Controller
             }
 
             $qi = nilaiQiModel::all()->sortByDesc('nilai_qi');
-            dd($qi->find(0),  $qi->find(1));
+            // dd($qi->find(0),  $qi->find(1));
             // foreach ($qi as $key) {
             //     $nilaiqi[] = $key;
             // // }
