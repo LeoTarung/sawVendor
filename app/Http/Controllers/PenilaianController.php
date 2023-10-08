@@ -22,6 +22,12 @@ class PenilaianController extends Controller
         }
         // dd($alternatif);
         // $subKriteria = subKriteriaModel::all();
+        foreach ($kriteria as $key) {
+            if ($key->status != 'Setuju') {
+                return redirect("/kriteria");
+            } else {
+            }
+        }
         $penilaian = PenilaianModel::all();
 
         // dd($subrelation);
@@ -129,6 +135,12 @@ class PenilaianController extends Controller
         }
         // $alternatif = (object) $alternatif;
         // $subKriteria = subKriteriaModel::all();
+        foreach ($kriteria as $key) {
+            if ($key->status != 'Setuju') {
+                return redirect("/kriteria");
+            } else {
+            }
+        }
         $penilaian = PenilaianModel::all();
 
         // dd($subrelation);
@@ -265,6 +277,12 @@ class PenilaianController extends Controller
         $kriteria = KriteriaModel::all();
         $alt = AlternatifModel::all()->sortBy('created_at');
         // $sub = subKriteriaModel::all();
+        foreach ($kriteria as $key) {
+            if ($key->status != 'Setuju') {
+                return redirect("/kriteria");
+            } else {
+            }
+        }
         if ($alt->first() != null && $kriteria->first() != null) {
             foreach ($alt as $key) {
                 $alternatif[] = $key;
@@ -405,7 +423,7 @@ class PenilaianController extends Controller
             }
 
             $qi = nilaiQiModel::all()->sortByDesc('nilai_qi');
-            dd($qi->find(0),  $qi->find(1));
+            // dd($qi->find(0),  $qi->find(1));
             // foreach ($qi as $key) {
             //     $nilaiqi[] = $key;
             // // }

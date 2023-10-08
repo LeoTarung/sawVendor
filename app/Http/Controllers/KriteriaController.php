@@ -139,7 +139,7 @@ class KriteriaController extends Controller
         $kriteria = $id;
         KriteriaModel::where('kode_kriteria', $kriteria)
             ->update([
-                'status' => 'ACC'
+                'status' => 'Setuju'
             ]);
 
         // return Redirect("/kriteria");
