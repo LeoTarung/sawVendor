@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\AlternatifModel;
 use Illuminate\Http\Request;
-
+use App\Models\KriteriaModel;
 class AlternativeController extends Controller
 {
     public function index()
     {
+        $kriteria = KriteriaModel::all();
+        foreach ($kriteria as $key) {
+            if ($key->status != 'Setuju') {
+                return redirect("/kriteria");
+            } else {
+            }
+        }
         $data = AlternatifModel::orderBy('created_at')->get();
         return view('alternatif', [
             'alternatif' => $data
