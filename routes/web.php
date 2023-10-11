@@ -23,7 +23,7 @@ Route::get('/daftar', [AuthController::class, 'tampilanDaftar']);
 Route::post('/daftar', [AuthController::class, 'daftar']);
 Route::get('forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('forgot-password', [AuthController::class, 'sendResetLink'])->name('password.update');
-
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 // Route::get('/', function () {
 //     return view('home');
 // });

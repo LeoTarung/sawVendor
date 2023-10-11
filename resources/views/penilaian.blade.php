@@ -69,21 +69,23 @@
                                 <input type="text" class="w-100 w-100   rounded border-primary fw-bold"
                                     id="kode_alternatif_edit" name="kode_alternatif_edit" required readonly>
                             </div>
-                            {{-- @for ($k = 0; $k < $kriteriaCount; $k++)
+                            @for ($k = 0; $k < $kriteriaCount; $k++)
                                 <div class="col-12 mb-3">
                                     <div class="form-floating">
                                         <label for="{{ $kriteria[$k] }}" class="w-50">{{ $kriteria[$k] }}</label>
-                                        <select class="form-select w-100  rounded border-primary fw-bold w-75"
+                                        {{-- <select class="form-select w-100  rounded border-primary fw-bold w-75"
                                             aria-label="Floating label select example" id="{{ $kriteria[$k] }}"
                                             name="kriteriaEdit{{ $k + 1 }}">
                                             <option selected id="option{{ $k }}"></option>
                                             @foreach ($subKriteria->where('cat_kriteria', 'C' . ($k + 1)) as $key)
                                                 <option value="{{ $key->range }}">{{ $key->range }}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
+                                        <input type="number" class="w-100 w-100   rounded border-primary fw-bold"
+                                            id="edit_{{ $k }}" name="kriteriaEdit{{ $k + 1 }}" required>
                                     </div>
                                 </div>
-                            @endfor --}}
+                            @endfor
                         </div>
                         <div class="modal-footer">
 
@@ -166,11 +168,13 @@
                 success: function(data) {
                     let kodeEdit = document.getElementById('kode_alternatif_edit');
                     kodeEdit.value = alternatif;
-                    // console.log(data);
+                    console.log(data);
                     for (let index = 0; index < {{ $kriteriaCount }}; index++) {
-                        let option = document.getElementById('option' + index);
-                        $("#option" + index).val(data[index]);
-                        option.innerHTML = data[index];
+                        let option = document.getElementById('edit_' + index);
+
+                        // $("#edit" + data[index].kode_kriteria).val(data[index].nilai);
+                        option.value = data[index].nilai;
+                        console.log(option);
                     }
                 }
             })
