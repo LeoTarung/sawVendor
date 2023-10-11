@@ -96,14 +96,14 @@ class PenilaianController extends Controller
     {
         for ($i = 1; $i <= KriteriaModel::count(); $i++) {
             # code...
-            $get[] = PenilaianModel::where('kode_alternatif', $alternatif)
+            $data[] = PenilaianModel::where('kode_alternatif', $alternatif)
                 ->where('kode_kriteria', 'C' . $i)
                 ->first();
         }
         // dd($get);
-        foreach ($get as $key) {
-            $data[] = $key->sub->keterangan;
-        }
+        // foreach ($get as $key) {
+        // $data[] = $key->sub->keterangan;
+        // }
 
         return response()->json($data);
     }
@@ -113,14 +113,14 @@ class PenilaianController extends Controller
         // dd($request);
         $alternatif = $request->kode_alternatif_edit;
         for ($i = 1; $i <=  $kriteriaCount = KriteriaModel::count(); $i++) {
-            ${'nilai' . $i} = subKriteriaModel::where('range', $request->{'kriteriaEdit' . $i})->first();
+            // ${'nilai' . $i} = subKriteriaModel::where('range', $request->{'kriteriaEdit' . $i})->first();
             PenilaianModel::where('kode_alternatif', $alternatif)
                 ->where('kode_kriteria', 'C' . $i)
                 ->update([
                     // 'kode_alternatif' => $request->kode_alternatif_edit,
                     // 'kode_kriteria' => 'C' . $i,
-                    'nilai' => ${'nilai' . $i}->nilai,
-                    'sub_kriteria' =>  ${'nilai' . $i}->id,
+                    'nilai' => $request->{'kriteriaEdit' . $i},
+                    // 'sub_kriteria' =>  ${'nilai' . $i}->id,
                 ]);
             // dd(${'nilai' . $i});
         }
